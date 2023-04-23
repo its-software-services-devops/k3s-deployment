@@ -8,10 +8,10 @@ global:
     device_id: ${DEVICE_ID}
 
 remote_write:
-  - url: ${REMOTE_PROM_URL}
+  - url: <<REMOTE_PROM_URL>>
     basic_auth:
-      username: ${REMOTE_PROM_USER}
-      password: ${REMOTE_PROM_PASSWORD}
+      username: <<REMOTE_PROM_USER>>
+      password: <<REMOTE_PROM_PASSWORD>>
 
 # Alertmanager configuration
 alerting:
