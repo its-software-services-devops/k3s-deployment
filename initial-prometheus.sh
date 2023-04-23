@@ -1,6 +1,6 @@
 #!/bin/sh
 
-set -o allexport; source ./.env; set +o allexport
+export $(xargs <.env)
 
 SRC_FILE=00-configs/prometheus-tpl.yaml
 DST_FILE=00-configs/prometheus.yaml
