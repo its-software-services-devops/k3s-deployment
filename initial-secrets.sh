@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 SRC_FILE=.env
 DST_FILE=addons/initial-secrets.yaml
