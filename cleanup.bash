@@ -1,4 +1,4 @@
 #!/bin/bash
 
-docker-compose down
-docker volume rm $(docker volume ls -q)
+sudo docker-compose down
+sudo docker volume rm $(docker volume ls -q)
