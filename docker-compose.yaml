@@ -6,7 +6,7 @@ services:
   server:
     hostname: k3s-master-1
     restart: always
-    image: "gcr.io/its-artifact-commons/k3s:${K3S_VERSION}"
+    image: "rancher:${K3S_VERSION}"
     command:
     - server
     tmpfs:
@@ -20,6 +20,7 @@ services:
     volumes:
       - .:/output
       - ./addons/initial-secrets.yaml:/var/lib/rancher/k3s/server/manifests/initial-secrets.yaml
+      - ./addons/addons-argocd.yaml:/var/lib/rancher/k3s/server/manifests/addons-argocd.yaml
       - k3s-server:/var/lib/rancher/k3s
     ports:
     - 6443:6443
@@ -35,7 +36,7 @@ services:
   agent:
     hostname: k3s-worker-1
     restart: always
-    image: "gcr.io/its-artifact-commons/k3s:${K3S_VERSION}"
+    image: "rancher:${K3S_VERSION}"
     command:
     - agent
     tmpfs:
