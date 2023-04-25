@@ -6,7 +6,7 @@ services:
   server:
     hostname: k3s-master-1
     restart: always
-    image: "rancher:${K3S_VERSION}"
+    image: "rancher/k3s:${K3S_VERSION}"
     command:
     - server
     tmpfs:
@@ -36,7 +36,7 @@ services:
   agent:
     hostname: k3s-worker-1
     restart: always
-    image: "rancher:${K3S_VERSION}"
+    image: "rancher/k3s:${K3S_VERSION}"
     command:
     - agent
     tmpfs:
