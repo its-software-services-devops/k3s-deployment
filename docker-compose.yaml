@@ -23,6 +23,14 @@ services:
       - k3s-server:/var/lib/rancher/k3s
     ports:
     - 6443:6443
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
   agent:
     hostname: k3s-worker-1
@@ -39,6 +47,10 @@ services:
     environment:
     - K3S_URL=https://server:6443
     - K3S_TOKEN=secret
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
   node-exporter:
     image: prom/node-exporter:v1.5.0
@@ -55,6 +67,10 @@ services:
       - '--path.rootfs=/rootfs'
       - --collector.filesystem.ignored-mount-points
       - "^/(sys|proc|dev|host|etc|rootfs/var/lib/docker/containers|rootfs/var/lib/docker/overlay2|rootfs/run/docker/netns|rootfs/var/lib/docker/aufs)($$|/)"      
+    #logging:
+    #  driver: "json-file"
+    #  options: 
+    #    tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
 
   prometheus:
     environment:
@@ -75,3 +91,28 @@ services:
     volumes:
       - ${BASEDIR}/00-configs/prometheus.yaml:/etc/prometheus/prometheus.yaml:ro
       - ${WIP_DIR}/prometheus:/prometheus
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
+
+  promtail:
+    container_name: promtail
+    image: grafana/promtail:2.8.1
+    restart: always
+    volumes:
+      - ${CONTAINERS_LOG_DIR}:/var/lib/docker/containers:ro
+      - ${BASEDIR}/00-configs/promtail.yaml:/etc/promtail/promtail.yaml
+      - ${WIP_DIR}/position:/tmp/position
+      - /var/log:/host/var/log:ro
+    command: -config.file=/etc/promtail/promtail.yaml -config.expand-env=true
+    environment:
+      - DUMMY=001
+      - REMOTE_LOKI_USER=${REMOTE_LOKI_USER}
+      - REMOTE_LOKI_PASSWORD=${REMOTE_LOKI_PASSWORD}
+      - REMOTE_LOKI_HOST=${REMOTE_LOKI_HOST}
+      - DEVICE_ID=${DEVICE_ID}
+    logging:
+      driver: "json-file"
+      options: 
+        tag: "{{.ImageName}}|{{.Name}}|{{.ImageFullID}}|{{.FullID}}"
